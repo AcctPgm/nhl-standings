@@ -27,18 +27,67 @@ Sub Formatting(x)
     wsStandings.Range("C2").Select
     ActiveWindow.FreezePanes = True
     
-    ' Align the column headings
-    wsStandings.Range("C1:I1").HorizontalAlignment = xlRight
-    wsStandings.Columns("J:L").HorizontalAlignment = xlCenter
-    wsStandings.Range("M1,O1,Q1").HorizontalAlignment = xlRight
-    
-    ' Centre the Conference & Division columns
-    wsStandings.Columns(ColLetter("Conf", wsStandings) & ":" & ColLetter("Conf", wsStandings)).HorizontalAlignment = xlCenter
-    wsStandings.Columns(ColLetter("Div", wsStandings) & ":" & ColLetter("Div", wsStandings)).HorizontalAlignment = xlCenter
-    
     ' Winning % projected to be required to be in playoffs
     wsStandings.Range("Playoffs").NumberFormat = "0.000"
+
+    ' Position change over last 10 games
+    wsStandings.Range("L10Change").NumberFormat = "+ 0;- 0;""-""??"
     
+    ' Format columns according to the headings
+    For Each c In wsStandings.Range("A1", wsStandings.Range("A1").End(xlToRight))
+        Select Case c.Text
+        Case "#"
+            c.ColumnWidth = 5
+            c.EntireColumn.HorizontalAlignment = xlCenter
+        Case "Team"
+            c.ColumnWidth = 22
+        Case "GP"
+            c.ColumnWidth = 6
+            c.HorizontalAlignment = xlRight
+        Case "W"
+            c.ColumnWidth = 6
+            c.HorizontalAlignment = xlRight
+        Case "L"
+            c.ColumnWidth = 6
+            c.HorizontalAlignment = xlRight
+        Case "OTL"
+            c.ColumnWidth = 6
+            c.HorizontalAlignment = xlRight
+        Case "Pts"
+            c.ColumnWidth = 6
+            c.HorizontalAlignment = xlRight
+        Case "Win%"
+            c.ColumnWidth = 6
+            c.HorizontalAlignment = xlRight
+        Case "Proj"
+            c.ColumnWidth = 6
+            c.HorizontalAlignment = xlRight
+        Case "Playoffs"
+            c.HorizontalAlignment = xlRight
+        Case "ROW"
+            c.ColumnWidth = 6
+            c.HorizontalAlignment = xlRight
+        Case "GF"
+            c.ColumnWidth = 6
+            c.HorizontalAlignment = xlRight
+        Case "GA"
+            c.ColumnWidth = 6
+            c.HorizontalAlignment = xlRight
+        Case "Diff"
+            c.ColumnWidth = 6
+            c.HorizontalAlignment = xlRight
+        Case "Home"
+            c.ColumnWidth = 7
+        Case "Road"
+            c.ColumnWidth = 7
+        Case "L10"
+            c.ColumnWidth = 7
+        Case "L10 Chg"
+            c.ColumnWidth = 7
+            c.HorizontalAlignment = xlRight
+        End Select
+    Next c
+
     ' Delete any existing conditional formatting (not that there should be any)
     wsStandings.Cells.FormatConditions.Delete
     

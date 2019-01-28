@@ -28,9 +28,10 @@ Sub Calculations(x)
     wsStandings.Columns("A:A").ColumnWidth = 4
     
     ' Delete the Streak column
-    wsStandings.Columns("M:M").Delete Shift:=xlToLeft
+'    wsStandings.Columns("M:M").Delete Shift:=xlToLeft
     
     ' New columns
+    wsStandings.Columns("M:M").Insert Shift:=xlToRight, CopyOrigin:=xlFormatFromLeftOrAbove
     wsStandings.Columns("L:L").Insert Shift:=xlToRight, CopyOrigin:=xlFormatFromLeftOrAbove
     wsStandings.Columns("K:M").Insert Shift:=xlToRight, CopyOrigin:=xlFormatFromLeftOrAbove
     wsStandings.Columns("J:J").Insert Shift:=xlToRight, CopyOrigin:=xlFormatFromLeftOrAbove
@@ -107,7 +108,13 @@ Sub Calculations(x)
     wsStandings.Cells(1, wbStandings.Names("Away_Rank").RefersToRange.Column).Formula = "#"
     wsStandings.Range("Away_Rank").Formula = "=IF(LeagueWide,RANK.EQ(A_PG,A_PG,0),COUNTIFS(Conf,Conf,A_PG,"">""&A_PG)+1)"
         
+    wsStandings.Cells(1, wbStandings.Names("L10Change").RefersToRange.Column).Formula = "L10 Chg"
+    wsStandings.Range("L10Change").Formula = "=IF(LeagueWide,RANK.EQ(L10_PPG,L10_PPG)-League," & _
+        "COUNTIFS(Conf,Conf,L10_PPG,"">""&L10_PPG)-COUNTIFS(Conf,Conf,PPG_,"">""&PPG_))"
+        
         ' New column headings & Formulas used to check in/out of playoffs and other stuff
+    wsStandings.Cells(1, wbStandings.Names("Teams").RefersToRange.Column).Formula = "Team"
+    wsStandings.Cells(1, wbStandings.Names("L10Change").RefersToRange.Column).Formula = "L10 Chg"
     wsStandings.Cells(1, wbStandings.Names("W_PG").RefersToRange.Column).Formula = "W_PG"
     wsStandings.Range("W_PG").Formula = "=IF(GP_=0,0,Wins/GP_)"
     wsStandings.Cells(1, wbStandings.Names("ROW_PG").RefersToRange.Column).Formula = "ROW_PG"
@@ -175,7 +182,15 @@ Sub Calculations(x)
     wsStandings.Range("ClinchOut").Formula = "=AND((COUNTIFS(Conf,Conf,Points,"">""&Max_Pts)+COUNTIFS(Conf,Conf,Points,Max_Pts,ROW_,"">""&Max_ROW)+COUNTIFS(Conf,Conf,Points,Max_Pts,ROW_,Max_ROW,Diff_PG,"">""&Diff_PG))>7," & _
         "(COUNTIFS(Div,Div,Points,"">""&Max_Pts)+COUNTIFS(Div,Div,Points,Max_Pts,ROW_,"">""&Max_ROW)+COUNTIFS(Div,Div,Points,Max_Pts,ROW_,Max_ROW,Diff_PG,"">""&Diff_PG))>3)"
 
+    ' Calculate PPG before the previous 10 games
+    wsStandings.Cells(1, wbStandings.Names("L10_PPG").RefersToRange.Column).Formula = "L10_PPG"
+    wsStandings.Range("L10_PPG").Formula = "=IFERROR((Points-(LEFT(Last10,FIND(""-"",Last10)-1)*2+MID(Last10,FIND(""-""," & _
+        "Last10,FIND(""-"",Last10)+1)+1,LEN(Last10))))/(GP_-(LEFT(Last10,FIND(""-"",Last10)-1)+MID(Last10,FIND(""-"",Last10)+1," & _
+        "FIND(""-"",Last10,FIND(""-"",Last10)+1)-FIND(""-"",Last10)-1)+MID(Last10,FIND(""-"",Last10," & _
+        "FIND(""-"",Last10)+1)+1,LEN(Last10)))),0)"
+
     ' Check whether the teams are in sorted order
+    wsStandings.Cells(1, wbStandings.Names("NeedSort").RefersToRange.Column).Formula = "NeedSort"
     wsStandings.Range("NeedSort").Formula = "=IF(ISBLANK(AQ3),0,IF(IF(ConfSort,W2<W3,W2>W3),0,IF(AF2>AF3,0,IF(J2<J3,0,1))))"
     
 End Sub
