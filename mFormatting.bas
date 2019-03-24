@@ -31,7 +31,7 @@ Sub Formatting(x)
     wsStandings.Range("Playoffs").NumberFormat = "0.000"
 
     ' Position change over last 10 games
-    wsStandings.Range("L10Change").NumberFormat = "+ 0;- 0;""-""??"
+    wsStandings.Range("L10Change").NumberFormat = "[Color10]+ 0;[Color9]- 0;""-""??"
     
     ' Format columns according to the headings
     For Each c In wsStandings.Range("A1", wsStandings.Range("A1").End(xlToRight))

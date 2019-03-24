@@ -19,6 +19,8 @@ Sub Calculations(x)
         nme = Mid(c.Text, InStr(c.Text, " ") + 1, Len(c.Text))
         If Left(nme, 2) = "x-" Or Left(nme, 2) = "y-" Or Left(nme, 2) = "z-" Then
             nme = Mid(nme, 3, Len(nme))
+        ElseIf Left(nme, 4) = "xyz-" Then
+            nme = Mid(nme, 5, Len(nme))
         End If
         c.Value = nme
     Next c
@@ -176,11 +178,11 @@ Sub Calculations(x)
     wsStandings.Range("PPct_Calc").Formula = "=IF(GP_=82,0,((MIN(MINIFS(IF(InPlayoffs,Conf9th,Conf8th),Conf,Conf),MINIFS(IF(InPlayoffs,Div4th,Div3rd),Div,Div))+0.001)*164-Points)/(82-GP_)/2)"
     
     wsStandings.Cells(1, wbStandings.Names("ClinchIn").RefersToRange.Column).Formula = "ClinchIn"
-    wsStandings.Range("ClinchIn").Formula = "=OR((COUNTIFS(Conf,Conf,Max_Pts,"">""&Points)+COUNTIFS(Conf,Conf,Max_Pts,Points,ROW_,"">""&Max_ROW)+COUNTIFS(Conf,Conf,Max_Pts,Points,ROW_,Max_ROW,Diff_PG,"">""&Diff_PG))<7," & _
-        "(COUNTIFS(Div,Div,Max_Pts,"">""&Points)+COUNTIFS(Div,Div,Max_Pts,Points,ROW_,"">""&Max_ROW)+COUNTIFS(Div,Div,Max_Pts,Points,ROW_,Max_ROW,Diff_PG,"">""&Diff_PG))<3)"
+    wsStandings.Range("ClinchIn").Formula = "=OR((COUNTIFS(Conf,Conf,Max_Pts,"">""&Points)+COUNTIFS(Conf,Conf,Max_Pts,Points,ROW_,"">""&Max_ROW)+COUNTIFS(Conf,Conf,Max_Pts,Points,ROW_,Max_ROW,GP_,82,Diff_PG,"">""&Diff_PG))<=7," & _
+        "(COUNTIFS(Div,Div,Max_Pts,"">""&Points)+COUNTIFS(Div,Div,Max_Pts,Points,ROW_,"">""&Max_ROW)+COUNTIFS(Div,Div,Max_Pts,Points,ROW_,Max_ROW,GP_,82,Diff_PG,"">""&Diff_PG))<3)"
     wsStandings.Cells(1, wbStandings.Names("ClinchOut").RefersToRange.Column).Formula = "ClinchOut"
-    wsStandings.Range("ClinchOut").Formula = "=AND((COUNTIFS(Conf,Conf,Points,"">""&Max_Pts)+COUNTIFS(Conf,Conf,Points,Max_Pts,ROW_,"">""&Max_ROW)+COUNTIFS(Conf,Conf,Points,Max_Pts,ROW_,Max_ROW,Diff_PG,"">""&Diff_PG))>7," & _
-        "(COUNTIFS(Div,Div,Points,"">""&Max_Pts)+COUNTIFS(Div,Div,Points,Max_Pts,ROW_,"">""&Max_ROW)+COUNTIFS(Div,Div,Points,Max_Pts,ROW_,Max_ROW,Diff_PG,"">""&Diff_PG))>3)"
+    wsStandings.Range("ClinchOut").Formula = "=AND((COUNTIFS(Conf,Conf,Points,"">""&Max_Pts)+COUNTIFS(Conf,Conf,Points,Max_Pts,ROW_,"">""&Max_ROW)+COUNTIFS(Conf,Conf,Points,Max_Pts,ROW_,Max_ROW,GP_,82,Diff_PG,"">""&Diff_PG))>7," & _
+        "(COUNTIFS(Div,Div,Points,"">""&Max_Pts)+COUNTIFS(Div,Div,Points,Max_Pts,ROW_,"">""&Max_ROW)+COUNTIFS(Div,Div,Points,Max_Pts,ROW_,Max_ROW,GP_,82,Diff_PG,"">""&Diff_PG))>3)"
 
     ' Calculate PPG before the previous 10 games
     wsStandings.Cells(1, wbStandings.Names("L10_PPG").RefersToRange.Column).Formula = "L10_PPG"
