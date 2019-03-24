@@ -17,8 +17,8 @@ Sub Calculations(x)
         ' Replace any non-breaking space characters (160) with a regular space
         c.Value = Replace(c.Text, Chr(160), " ")
         nme = Mid(c.Text, InStr(c.Text, " ") + 1, Len(c.Text))
-        If Left(nme, 1) = "x" Or Left(nme, 1) = "y" Or Left(nme, 1) = "z" Then
-            nme = Mid(nme, InStr(nme, " ") + 2, Len(nme))
+        If Left(nme, 2) = "x-" Or Left(nme, 2) = "y-" Or Left(nme, 2) = "z-" Then
+            nme = Mid(nme, 3, Len(nme))
         End If
         c.Value = nme
     Next c
@@ -185,9 +185,7 @@ Sub Calculations(x)
     ' Calculate PPG before the previous 10 games
     wsStandings.Cells(1, wbStandings.Names("L10_PPG").RefersToRange.Column).Formula = "L10_PPG"
     wsStandings.Range("L10_PPG").Formula = "=IFERROR((Points-(LEFT(Last10,FIND(""-"",Last10)-1)*2+MID(Last10,FIND(""-""," & _
-        "Last10,FIND(""-"",Last10)+1)+1,LEN(Last10))))/(GP_-(LEFT(Last10,FIND(""-"",Last10)-1)+MID(Last10,FIND(""-"",Last10)+1," & _
-        "FIND(""-"",Last10,FIND(""-"",Last10)+1)-FIND(""-"",Last10)-1)+MID(Last10,FIND(""-"",Last10," & _
-        "FIND(""-"",Last10)+1)+1,LEN(Last10)))),0)"
+        "Last10,FIND(""-"",Last10)+1)+1,LEN(Last10))))/(GP_-10),0)"
 
     ' Check whether the teams are in sorted order
     wsStandings.Cells(1, wbStandings.Names("NeedSort").RefersToRange.Column).Formula = "NeedSort"
